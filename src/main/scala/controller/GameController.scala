@@ -37,10 +37,6 @@ class GameController {
     }
   }
 
-  def hasSpell(): Boolean = {
-    _spell.isDefined
-  }
-
   def spell(): Ability = {
     if (_spell.isDefined) {
       _spell.get 
@@ -51,12 +47,6 @@ class GameController {
 
   def spell_=(sp: Ability): Unit = {
     _spell = Some(sp)
-  }
-
-
-  def changeState(st: GameState) = {
-    state = st
-    st.controller = this
   }
 
   def startGame() = {
@@ -81,40 +71,28 @@ class GameController {
     }
   }
 
-  def addObserver(obs: Observer) = {
-    this.observers += obs
-  }
-
   def getInput(): Int = {
     val in = StdIn.readLine()
     in.toInt
   } 
 
-  def play() = {
-    state.doAction()
-  }
+  /************************** Añadir desde aca *******************************************/
 
-  def finish(): Boolean = {
-    win() || lose()
-  }
+  def addObserver(obs: Observer) = { }
+  def changeState(st: GameState) = { }
+  def play() = { }
+  def finish(): Boolean = false
+  def win(): Boolean = false
+  def lose(): Boolean = false
+  def hasSpell(): Boolean = false
+  def selectAlly(id: Int) = { }
+  def selectAllyTarget(id: Int) = { }
+  def selectEnemy(id: Int) = { }
+  def selectEnemyTarget(id: Int) = { }
+  def doAttack() = { }
+  def useSpell() = { }
 
-  def win(): Boolean = {
-    for(e <- enemies) {
-      if(e.isAlive) {
-        return false
-      }
-    }
-    true
-  }
-
-  def lose(): Boolean = {
-    for(a <- allies) {
-      if(a.isAlive) {
-        return false
-      }
-    }
-    true
-  }
+  /*********************** Terminar *******************************************************/
 
   def alliesLength(): Int = {
     allies.length
@@ -123,34 +101,6 @@ class GameController {
   def enemiesLength(): Int = {
     enemies.length
   }
-
-  def selectAlly(id: Int) = {
-    _selected = Some(allies(id))
-  }
-
-  def selectAllyTarget(id: Int) = {
-    _target = Some(enemies(id))
-  }
-
-  def selectEnemy(id: Int) = {
-    _selected = Some(enemies(id))
-  }
-
-  def selectEnemyTarget(id: Int) = {
-    _target = Some(allies(id))
-  }
-
-  def doAttack() = {
-    selected.doAttack(target)
-    notifyAttack(selected, target)
-  }
-
-  def useSpell() = {
-    selected.useSpell(target, spell)
-    notifySpell(selected, target, spell)
-    _spell = None
-  }
-
 
   def promptStart() = {
     println("Turno del jugador")
