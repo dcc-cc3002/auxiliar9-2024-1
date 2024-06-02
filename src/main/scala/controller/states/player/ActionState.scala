@@ -26,21 +26,4 @@ class ActionState(private val ally: GameUnit) extends AbstractGameState {
     if (selected.isDefined)
       controller.state = selected.get
   }
-
-  // override def doAction(): Unit = {
-  //   controller.promptActions()
-  //   val id: Int = controller.getInput() 
-  //   id match {
-  //     case 0 => controller.changeState(new UnitState())
-  //     case 1 => controller.changeState(new TargetState())
-  //     case 2 => 
-  //     {
-  //       if (controller.selected().canUseSpell())
-  //         controller.changeState(new SpellState())
-  //       else
-  //         controller.promptNoEnergy()
-  //     }
-  //     case _ => controller.promptError(id)
-  //   }
-  // }
 }

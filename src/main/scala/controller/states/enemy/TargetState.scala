@@ -20,12 +20,4 @@ class TargetState(private val source: GameUnit, private val spell: Option[Abilit
     if (selected.isDefined)
       controller.state = new FinalState(source, selected.get, spell)
   }
-
-  // override def doAction(): Unit = {
-  //   val id = random.nextInt(controller.alliesLength())
-  //   controller.selectEnemyTarget(id)
-  //   controller.changeState(new FinalState())
-  // }
-
-
 }

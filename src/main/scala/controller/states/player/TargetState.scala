@@ -31,14 +31,4 @@ class TargetState(private val source: GameUnit, private val spell: Option[Abilit
     if (selected.isDefined)
       controller.state = new FinalState(source, selected.get, spell)
   }
-  // override def doAction(): Unit = {
-  //   controller.promptEnemies()
-  //   val id: Int = controller.getInput()
-  //   if (0 < id && id <= controller.enemiesLength()) {
-  //     controller.selectAllyTarget(id-1)
-  //     controller.changeState(new FinalState())
-  //   } else {
-  //     controller.promptError(id)
-  //   }
-  // }
 }

@@ -7,17 +7,6 @@ import model.units.GameUnit
 class UnitState extends AbstractGameState {
   private var selected: Option[GameUnit] = None
 
-  // override def doAction(): Unit = {
-  //   val random = new Random()
-  //   var id = random.nextInt(controller.enemiesLength())
-  //   controller.selectEnemy(id)
-  //   while(!controller.selected().isAlive()) {
-  //     id = random.nextInt(controller.enemiesLength())
-  //     controller.selectEnemy(id)
-  //   }
-  //   controller.changeState(new ActionState(random))
-  // }
-  //
   override def notify(controller: GameController): Unit = {
     controller.notifyEnemyStart()
   }

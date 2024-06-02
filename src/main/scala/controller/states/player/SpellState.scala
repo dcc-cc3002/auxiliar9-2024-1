@@ -6,23 +6,6 @@ import controller.GameController
 import model.abilities.Ability
 
 class SpellState(private val src: GameUnit) extends AbstractGameState {
-  // override def doAction(): Unit = {
-  //   val spells = controller.selected().spells()
-  //   controller.promptSpells(spells)
-  //   val id = controller.getInput()
-  //   if (0 < id && id <= spells.length) {
-  //     val sp = spells(id-1)
-  //     if (controller.selected().canUse(sp))
-  //     {
-  //       controller.spell = spells(id-1)
-  //       controller.changeState(new TargetState())
-  //     } else {
-  //       controller.promptNoEnergy()
-  //     }
-  //   } else {
-  //     controller.promptError(id)
-  //   }
-  // }
   private var selected: Option[Ability] = None
 
   override def notify(controller: GameController) = {
