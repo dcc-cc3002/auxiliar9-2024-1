@@ -9,11 +9,5 @@ import model.abilities.Ability
 class FinalState(private val src: GameUnit, private val dest: GameUnit, private val sp: Option[Ability]) extends AbstractGameState {
 
   override def update(controller: GameController): Unit = {
-    if (sp.isDefined)
-      src.useSpell(dest, sp.get)
-    else
-      src.doAttack(dest)
-
-    controller.state = new player.InitialState()
   }
 }
