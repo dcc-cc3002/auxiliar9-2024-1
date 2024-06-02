@@ -1,7 +1,7 @@
-package aux11.solution.model.abilities.allies
+package model.abilities.allies
 
 
-import aux11.solution.model.abilities.DamageAbility
+import model.abilities.AbstractAbility
 
-class Purple extends DamageAbility(100, "Hollow technique: Purple", 80) {
+class Purple extends AbstractAbility(100, "Hollow technique: Purple", 80) {
 }

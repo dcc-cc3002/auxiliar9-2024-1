@@ -1,15 +1,15 @@
-package controller.states.enemy
+package controller.states.player
 
 import controller.states.AbstractGameState
-import controller.states.player
+import controller.states.enemy
 
 class FinalState extends AbstractGameState {
   override def doAction(): Unit = {
     if (controller.hasSpell()) {
       controller.useSpell()
-    } else {
+    }  else {
       controller.doAttack()
-    }
-    controller.changeState(new player.InitialState())
+    } 
+    controller.changeState(new enemy.UnitState())
   }
 }

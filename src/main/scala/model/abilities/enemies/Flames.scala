@@ -1,7 +1,7 @@
-package aux11.solution.model.abilities.enemies
+package model.abilities.enemies
 
 
-import aux11.solution.model.abilities.DamageAbility
+import model.abilities.AbstractAbility
 
-class Flames extends DamageAbility(20, "Disaster Flames", 10) {
+class Flames extends AbstractAbility(20, "Disaster Flames", 10) {
 }

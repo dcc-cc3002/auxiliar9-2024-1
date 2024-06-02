@@ -1,6 +1,6 @@
-package aux11.solution.model.abilities.allies
+package model.abilities.allies
 
-import aux11.solution.model.abilities.DamageAbility
+import model.abilities.AbstractAbility
 
-class Basic extends DamageAbility(30, "Cursed Punch", 20) {
+class Basic extends AbstractAbility(30, "Cursed Punch", 20) {
 }

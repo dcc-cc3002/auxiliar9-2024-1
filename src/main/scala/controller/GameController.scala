@@ -1,12 +1,12 @@
-package aux11.solution.controller
+package controller
 
 import states.GameState
 import states.player.InitialState
 import observers.Observer
-import aux11.solution.model.units.GameUnit
-import aux11.solution.model.units.enemies._
-import aux11.solution.model.units.allies._
-import aux11.solution.model.abilities.Ability
+import model.units.GameUnit
+import model.units.enemies._
+import model.units.allies._
+import model.abilities.Ability
 import scala.collection.mutable.ArrayBuffer
 import scala.io.StdIn
 
@@ -148,6 +148,7 @@ class GameController {
   }
 
   def notifyAttack(from: GameUnit, to: GameUnit) {
+    
     for (o <- observers) {
       o.updateAttack(from, to)
     }

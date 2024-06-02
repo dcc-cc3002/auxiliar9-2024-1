@@ -1,7 +1,7 @@
-package aux11.solution.controller.states
+package controller.states
 
-import aux11.solution.controller.observers.Observer
-import aux11.solution.controller.GameController
+import controller.observers.Observer
+import controller.GameController
 
 trait GameState {
   var controller: GameController

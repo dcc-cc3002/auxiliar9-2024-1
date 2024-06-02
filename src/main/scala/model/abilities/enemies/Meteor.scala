@@ -1,6 +1,6 @@
-package aux11.solution.model.abilities.enemies
+package model.abilities.enemies
 
-import aux11.solution.model.abilities.DamageAbility
+import model.abilities.AbstractAbility
 
-class Meteor extends DamageAbility(40, "Maximum: Meteor", 40) {
+class Meteor extends AbstractAbility(40, "Maximum: Meteor", 40) {
 }

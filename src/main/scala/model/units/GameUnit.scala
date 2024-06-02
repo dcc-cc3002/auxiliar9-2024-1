@@ -1,6 +1,6 @@
-package aux11.solution.model.units
+package model.units
 
-import aux11.solution.model.abilities.Ability
+import model.abilities.Ability
 import scala.collection.mutable.ArrayBuffer
 
 trait GameUnit {
