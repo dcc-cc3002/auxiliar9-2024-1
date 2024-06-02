@@ -13,11 +13,9 @@ import model.abilities.Ability
 import scala.collection.mutable.ArrayBuffer
 import scala.compiletime.unitialized
 import scala.util.Random
-import controller.states.enemy.TargetState
-import controller.states.enemy.SpellState
 
 class GameController(private val model: GameModel, private val view: GameView) {
-  private var _state = unitialized
+  private var _state: GameState = unitialized
   private val ai = new Random()
   private val attackObs = new ArrayBuffer[ObserverAttack].empty
   init()
@@ -60,41 +58,18 @@ class GameController(private val model: GameModel, private val view: GameView) {
 
   def registerUnit(gUnit: GameUnit) = { }
 
+
+  /* parte 2 */
+  
+  def getAIUnit(): GameUnit = { }
+
+  def getAIChoice(u: GameUnit): GameState = { }
+
+  def getAITarget(): GameUnit = { }
+
+  def getAISpell(u: GameUnit): Ability = { }
+  
   /* Aqui termina */
-
-  def getAIUnit(): GameUnit = {
-    var choice = ai.nextInt(model.enemies.length)
-    while(!model.enemies(choice).isAlive()) {
-      choice = ai.nextInt(model.enemies.length)
-    }
-    model.enemies(choice)
-  }
-
-  def getAIChoice(u: GameUnit): GameState = {
-    var useSpell = u.canUseSpell() && ai.nextBoolean()
-    if (useSpell) {
-      new SpellState(u)
-    } else {
-      new TargetState(u)
-    }
-  }
-
-  def getAITarget(): GameUnit = {
-    var choice = ai.nextInt(model.allies.length)
-    while(!model.allies(choice).isAlive()) {
-      choice = ai.nextInt(model.allies.length)
-    }
-    model.allies(choice)
-  }
-
-  def getAISpell(u: GameUnit): Ability = {
-    val spells = u.spells()
-    var choice = ai.nextInt(spells.length)
-    while(!u.canUse(spells(choice))) {
-      choice = ai.nextInt(spells.length)
-    }
-    spells(choice)
-  }
 
   def notifyInitMessage() = {
     view.displayInitMessage()
