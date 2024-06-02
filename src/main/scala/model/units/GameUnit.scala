@@ -1,5 +1,7 @@
 package model.units
 
+import controller.observers.ObserverAttack
+
 import model.abilities.Ability
 import scala.collection.mutable.ArrayBuffer
 
@@ -20,4 +22,6 @@ trait GameUnit {
 
   def doAttack(target: GameUnit): Unit
   def useSpell(target: GameUnit, ability: Ability): Unit
+
+  def registerAttackObserver(obs: ObserverAttack): Unit
 }

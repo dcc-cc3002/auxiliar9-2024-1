@@ -1,162 +1,165 @@
 package controller
 
+
+import view.GameView
+import model.GameModel
 import states.GameState
 import states.player.InitialState
-import observers.Observer
+import observers._
 import model.units.GameUnit
 import model.units.enemies._
 import model.units.allies._
 import model.abilities.Ability
 import scala.collection.mutable.ArrayBuffer
-import scala.io.StdIn
+import scala.compiletime.uninitialized
+import scala.util.Random
+import controller.states.enemy.TargetState
+import controller.states.enemy.SpellState
 
-class GameController {
+class GameController(private val model: GameModel, private val view: GameView) {
 
-  private var state: GameState = _
-  private var observers = ArrayBuffer.empty[Observer]
-  private var allies = ArrayBuffer.empty[GameUnit]
-  private var enemies = ArrayBuffer.empty[GameUnit]
+  private var _state: GameState = uninitialized
+  private val ai = new Random()
+  private val attackObs = new ArrayBuffer[ObserverAttack].empty
+  init()
 
-  private var _selected: Option[GameUnit] = None
-  private var _target: Option[GameUnit] = None
-  private var _spell: Option[Ability] = None
 
-  def selected(): GameUnit = {
-    if (_selected.isDefined) {
-      _selected.get 
-    } else {
-      throw new AssertionError("Ally not defined")
-    }
+  private def init(): Unit = {
+    notifyInitMessage()
+    attackObs += new ObserverAttack(view)
+    model.init(this)
+    state = new InitialState()
   }
-
-  def target(): GameUnit = {
-    if (_target.isDefined) {
-      _target.get 
-    } else {
-      throw new AssertionError("Enemy not defined")
-    }
-  }
-
-  def spell(): Ability = {
-    if (_spell.isDefined) {
-      _spell.get 
-    } else {
-      throw new AssertionError("Spell not defined")
-    }
-  }
-
-  def spell_=(sp: Ability): Unit = {
-    _spell = Some(sp)
-  }
-
-  def startGame() = {
-    changeState(new InitialState())
-
-    allies += new GojoSatoru()
-    allies += new ItadoriYuji()
-
-    enemies += new Jogo()
-    enemies += new Mahito()
-
-    println("Bienvenido al combate!")
-  } 
-
-  def endGame() = {
+  private def checkFinished(): Unit = {
     if (win()) {
-      println("Felicidades! Ganaste!")
+      view.displayVictory()
     } else if (lose()) {
-      println("O no! Perdiste :c")
+      view.displayDefeat()
+    }
+  }
+
+  def hasFinished(): Boolean = {
+    win() || lose()
+  }
+
+  def handleInput(): Unit = {
+    state.handleInput(this)
+  }
+
+  def update(): Unit = {
+    state.update(this)
+    checkFinished()
+    view.render()
+  }
+
+  def state: GameState = _state
+  def state_=(other: GameState): Unit = {
+    _state =  other
+    _state.notify(this)
+  }
+
+  def getNumericalInput(): Int = {
+    view.getNumericalInput()
+  }
+
+  def getAlly(choice: Int): GameUnit = {
+    val u = model.allies(choice)
+    notifyAllyChoose(u)
+    u
+  }
+
+  def getEnemy(choice: Int): GameUnit = {
+    val u = model.enemies(choice)
+    u
+  }
+
+  def getAIUnit(): GameUnit = {
+    var choice = ai.nextInt(model.enemies.length)
+    while(!model.enemies(choice).isAlive()) {
+      choice = ai.nextInt(model.enemies.length)
+    }
+    model.enemies(choice)
+  }
+
+  def getAIChoice(u: GameUnit): GameState = {
+    var useSpell = u.canUseSpell() && ai.nextBoolean()
+    if (useSpell) {
+      new SpellState(u)
     } else {
-      println("Juego terminado antes de tiempo")
+      new TargetState(u)
     }
   }
 
-  def getInput(): Int = {
-    val in = StdIn.readLine()
-    in.toInt
-  } 
-
-  /************************** Añadir desde aca *******************************************/
-
-  def addObserver(obs: Observer) = { }
-  def changeState(st: GameState) = { }
-  def play() = { }
-  def finish(): Boolean = false
-  def win(): Boolean = false
-  def lose(): Boolean = false
-  def hasSpell(): Boolean = false
-  def selectAlly(id: Int) = { }
-  def selectAllyTarget(id: Int) = { }
-  def selectEnemy(id: Int) = { }
-  def selectEnemyTarget(id: Int) = { }
-  def doAttack() = { }
-  def useSpell() = { }
-
-  /*********************** Terminar *******************************************************/
-
-  def alliesLength(): Int = {
-    allies.length
+  def getAITarget(): GameUnit = {
+    var choice = ai.nextInt(model.allies.length)
+    while(!model.allies(choice).isAlive()) {
+      choice = ai.nextInt(model.allies.length)
+    }
+    model.allies(choice)
   }
 
-  def enemiesLength(): Int = {
-    enemies.length
+  def getAISpell(u: GameUnit): Ability = {
+    val spells = u.spells()
+    var choice = ai.nextInt(spells.length)
+    while(!u.canUse(spells(choice))) {
+      choice = ai.nextInt(spells.length)
+    }
+    spells(choice)
   }
 
-  def promptStart() = {
-    println("Turno del jugador")
-  } 
-
-  def promptError(opt: Int) = {
-    println(s"Opción inválida $opt")
-  }
-
-  def promptAllies() = {
-    println("Escoge un aliado:")
-    for(i <- 0 to allies.length - 1) {
-      println(s"${i+1}) ${allies(i).name}")
+  def registerUnit(gUnit: GameUnit) = {
+    for (o <- attackObs) {
+      gUnit.registerAttackObserver(o)
     }
   }
 
-  def promptEnemies() = {
-    println("Escoge un enemigo:")
-    for(i <- 0 to enemies.length - 1) {
-      println(s"${i+1}) ${enemies(i).name}")
-    }
+  def notifyInitMessage() = {
+    view.displayInitMessage()
+  }
+
+  def notifyPlayerStart() = {
+    view.displayPlayerStart()
+  }
+
+  def notifyEnemyStart() = {
+    view.displayEnemyStart()
+  }
+
+  def notifyPlayerUnits() = {
+    view.displayPlayerUnits(model.allies)
+  }
+
+  def notifyPlayerAction() = {
+    view.displayPlayerAction()
+  }
+
+  def notifyPlayerTarget() = {
+    view.displayPlayerTarget(model.enemies)
+  }
+
+  def notifyPlayerUnitSpells(pUnit: GameUnit) = {
+    view.displayPlayerUnitSpells(pUnit.spells())
+  }
+
+  def notifyAllyChoose(pUnit: GameUnit) = {
+    view.displayUnitInfo(pUnit)
+  }
+
+  def notifyErrorNoEnergy() = {
+    view.displayErrorNoEnergy()
+  }
+
+  def notifyErrorInvalidOption(choice: Int) = {
+    view.displayErrorInvalidOption(choice)
   }
 
 
-  def promptActions() = {
-    println(s"Estado de ${selected.name}")
-    println(s"Vida: ${selected.healthPoints}/${selected.maxHP}")
-    println(s"EM: ${selected.cursedEnergy}/${selected.maxCE}")
-    println(s"Técnica maldita: ${selected.technique}")
-    println("Escoge una acción:")
-    println("1) Atacar")
-    println("2) Usar técnica maldita")
-    println("0) Cambiar de aliado")
+  def win(): Boolean = {
+    !model.enemiesAlive()
   }
 
-  def promptSpells(sp: ArrayBuffer[Ability]) = {
-    println("Escoge una técnica maldita:")
-    for(i <- 0 to sp.length - 1) {
-      println(s"${i+1}) ${sp(i).name}")
-    }
+  def lose(): Boolean = {
+    !model.alliesAlive()
   }
 
-  def promptNoEnergy() = {
-    println("No tienes suficiente energía maldita")
-  }
-
-  def notifyAttack(from: GameUnit, to: GameUnit) {
-    
-    for (o <- observers) {
-      o.updateAttack(from, to)
-    }
-  }
-
-  def notifySpell(from: GameUnit, to: GameUnit, sp: Ability) {
-    for (o <- observers) {
-      o.updateSpell(from, to, sp)
-    }
-  }
 }

@@ -1,19 +1,14 @@
 import controller.GameController
-
-import view.ConsoleView
+import model.GameModel
+import view.GameView
 
 class BattleGame {
-  private var controller: GameController = GameController()
-  private var view: ConsoleView = ConsoleView()
-
-  private var name: String = "Hola"
 
   def run() = {
-    controller.startGame()
-    while(!controller.finish()) {
+    val controller: GameController = new GameController(new GameModel, new GameView)
+    while(!controller.hasFinished()) {
       controller.handleInput()
       controller.update()
-      view.render()
     }
   }
 

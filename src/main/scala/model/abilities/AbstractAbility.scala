@@ -8,9 +8,10 @@ abstract class AbstractAbility(
     private val damage: Int
 ) extends Ability {
 
-  def use(from: GameUnit, to: GameUnit): Unit = {
+  override def use(from: GameUnit, to: GameUnit): Int = {
     from.cursedEnergy -= cost
     to.healthPoints -= damage
+    damage
   }
 
 }

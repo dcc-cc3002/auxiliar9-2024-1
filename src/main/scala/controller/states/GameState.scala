@@ -1,9 +1,11 @@
 package controller.states
 
-import controller.observers.Observer
+import view.GameView
+
 import controller.GameController
 
 trait GameState {
-  var controller: GameController
-  def doAction(): Unit
+  def notify(controller: GameController): Unit
+  def handleInput(controller: GameController): Unit
+  def update(controller: GameController): Unit
 }   

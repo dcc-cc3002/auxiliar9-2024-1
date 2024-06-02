@@ -1,5 +1,7 @@
 package model.units
 
+import controller.observers.ObserverAttack
+
 import model.abilities.Ability
 
 import scala.collection.mutable.ArrayBuffer
@@ -15,6 +17,7 @@ abstract class AbstractGameUnit(
   private var _cursedEnergy = maxCE
   private var _healthPoints = maxHP
   private var _spells = ArrayBuffer.empty[Ability]
+  private var attackObs = ArrayBuffer.empty[ObserverAttack]
 
   def healthPoints: Int = _healthPoints
   def healthPoints_=(value: Int): Unit = _healthPoints =
@@ -40,9 +43,22 @@ abstract class AbstractGameUnit(
   def spells(): ArrayBuffer[Ability] = _spells.clone() 
   def addSpell(spell: Ability): Unit = _spells += spell
 
-  def doAttack(target: GameUnit): Unit = { target.healthPoints -= attack }
-  def useSpell(target: GameUnit, ability: Ability): Unit = {
-    ability.use(this, target)
+  def doAttack(target: GameUnit): Unit = { 
+    target.healthPoints -= attack
+    for (o <- attackObs) {
+      o.notifySimpleAttack(this, target, attack)
+    }
   }
+
+  def useSpell(target: GameUnit, ability: Ability): Unit = {
+    val dmg = ability.use(this, target)
+    for (o <- attackObs) {
+      o.notifySpellAttack(this, target, ability, dmg)
+    }
+  }
+
+  override def registerAttackObserver(obs: ObserverAttack): Unit = {
+    attackObs += obs
+  }  
 
 }
