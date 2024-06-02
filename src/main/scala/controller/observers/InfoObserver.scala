@@ -1,7 +1,7 @@
-package aux11.solution.controller.observers
+package controller.observers
 
-import aux11.solution.model.units.GameUnit
-import aux11.solution.model.abilities.Ability
+import model.units.GameUnit
+import model.abilities.Ability
 
 class InfoObserver extends Observer {
   def updateAttack(from: GameUnit, to: GameUnit): Unit = {

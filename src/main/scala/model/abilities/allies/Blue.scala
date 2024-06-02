@@ -1,6 +1,6 @@
-package aux11.solution.model.abilities.allies
+package model.abilities.allies
 
-import aux11.solution.model.abilities.DamageAbility
+import model.abilities.AbstractAbility
 
-class Blue extends DamageAbility(40, "Reverse technique: Blue", 30) {
+class Blue extends AbstractAbility(40, "Reverse technique: Blue", 30) {
 }

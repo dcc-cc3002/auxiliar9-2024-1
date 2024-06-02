@@ -1,6 +1,6 @@
-package aux11.solution.model.abilities
+package model.abilities
 
-import aux11.solution.model.units.GameUnit
+import model.units.GameUnit
 
 trait Ability {
   def cost: Int

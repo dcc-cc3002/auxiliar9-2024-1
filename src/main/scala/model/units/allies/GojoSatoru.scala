@@ -1,9 +1,9 @@
-package aux11.solution.model.units.allies
+package model.units.allies
 
-import aux11.solution.model.units.AbstractGameUnit
-import aux11.solution.model.abilities.allies.Blue
-import aux11.solution.model.abilities.allies.Red
-import aux11.solution.model.abilities.allies.Purple
+import model.units.AbstractGameUnit
+import model.abilities.allies.Blue
+import model.abilities.allies.Red
+import model.abilities.allies.Purple
 
 class GojoSatoru extends AbstractGameUnit("Satoru Gojo", 20, 100, 150) {
   addSpell(new Blue)

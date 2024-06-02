@@ -1,7 +1,7 @@
-package aux11.solution.controller.states.enemy
+package controller.states.enemy
 
-import aux11.solution.controller.states.AbstractGameState
-import aux11.solution.controller.states.player
+import controller.states.AbstractGameState
+import controller.states.player
 
 class FinalState extends AbstractGameState {
   override def doAction(): Unit = {

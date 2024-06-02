@@ -1,8 +1,8 @@
-package aux11.solution.model.units.enemies
+package model.units.enemies
 
-import aux11.solution.model.units.AbstractGameUnit
-import aux11.solution.model.abilities.enemies.Flames
-import aux11.solution.model.abilities.enemies.Meteor
+import model.units.AbstractGameUnit
+import model.abilities.enemies.Flames
+import model.abilities.enemies.Meteor
 
 class Jogo extends AbstractGameUnit("Jogo", 20, 100, 100) {
   addSpell(new Flames)

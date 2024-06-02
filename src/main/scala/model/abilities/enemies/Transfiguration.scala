@@ -1,6 +1,6 @@
-package aux11.solution.model.abilities.enemies
+package model.abilities.enemies
 
-import aux11.solution.model.abilities.DamageAbility
+import model.abilities.AbstractAbility
 
-class Transfiguration extends DamageAbility(60, "Idle Transfiguration", 50) {
+class Transfiguration extends AbstractAbility(60, "Idle Transfiguration", 50) {
 }

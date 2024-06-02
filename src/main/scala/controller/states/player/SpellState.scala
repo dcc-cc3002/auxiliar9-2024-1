@@ -1,6 +1,6 @@
-package aux11.solution.controller.states.player
+package controller.states.player
 
-import aux11.solution.controller.states.AbstractGameState
+import controller.states.AbstractGameState
 
 class SpellState extends AbstractGameState {
   override def doAction(): Unit = {
